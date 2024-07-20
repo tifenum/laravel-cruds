@@ -19,8 +19,8 @@ class ContractResource extends JsonResource
             'id' => $this->id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'user_id' => $this->user_id, // Assuming there's a user_id field
-            'contract_type_id' => $this->type, // Example field
+            'user_id' => $this->user_id,
+            'contract_type_id' => $this->type,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

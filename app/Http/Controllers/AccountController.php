@@ -61,25 +61,8 @@ class UserController extends Controller
         }
     }
 
-    // public function read()
-    // {
-    //     try {
-    //         $respons = User::all();
-    //         return response()->json([
-    //             'response' => Response::HTTP_OK,
-    //             'success' => true,
-    //             'message' => 'Read all user',
-    //             'data' => UserResource::collection($respons)
-    //         ], Response::HTTP_OK);
-            
-    //     } catch (QueryException $e) {
-    //         return response()->json([
-    //             'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-    //             'success' => false,
-    //             'message' => $e->getMessage(),
-    //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+
+    
     public function read()
     {
         try {
@@ -99,49 +82,8 @@ class UserController extends Controller
         }
     }
     
-    // public function update($id, Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required',
-    //         'email' => 'required|email|unique:users,email,' . $id,
-    //         'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
-    //     ]);
 
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'response' => Response::HTTP_BAD_REQUEST,
-    //             'success' => false,
-    //             'message' => $validator->errors(),
-    //         ], Response::HTTP_BAD_REQUEST);
-    //     }else{
-    //         try {
-    //             $user =  User::findOrFail($id);;
-    //             $user->name  = $request->name;
-    //             $user->email  = $request->email;
-    //             if($request->hasFile('photo')){
-    //                 $imagePath = $request->file('photo')->getRealPath();
-    //                 $result = Cloudinary::upload($imagePath,  ['folder' => 'user']);
-    //                 $imageUrl = $result->getSecurePath();
-    //                 $user->photo  = $imageUrl;
-    //             }
-    //             $user->save();
-    //             return response()->json([
-    //                 'response' => Response::HTTP_OK,
-    //                 'success' => true,
-    //                 'message' => 'update user by id ' . $id,
-    //                 'data' => $request->all()
-    //             ], Response::HTTP_OK);
-                
-    //         } catch (QueryException $e) {
-    //             return response()->json([
-    //                 'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-    //                 'success' => false,
-    //                 'message' => $e->getMessage(),
-    //                 'data' => $request->all()
-    //             ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //         }
-    //     }
-    // }
+    
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -194,7 +136,7 @@ class UserController extends Controller
     
                 $user->email = $request->email;
     
-                // Ensure you do not update the password if it's not provided
+
                 if ($request->has('password')) {
                     $user->password = bcrypt($request->password);
                 }
@@ -235,27 +177,8 @@ class UserController extends Controller
         }
     }
 
-    // public function search(Request $request){
-    //     try {
-    //         $keyword = $request->input('keyword');
-    //         $respons = User::where('name', 'like', "%$keyword%")->get();
-    //         return response()->json([
-    //             'response' => Response::HTTP_OK,
-    //             'success' => true,
-    //             'message' => 'Read user like '.$keyword,
-    //             'data' => UserResource::collection($respons)
-    //         ], Response::HTTP_OK
-    //     );
-            
-    //     } catch (QueryException $e) {
-    //         return response()->json([
 
-    //             'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-    //             'success' => false,
-    //             'message' => $e->getMessage(),
-    //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    
     public function search(Request $request)
     {
         try {

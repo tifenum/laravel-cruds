@@ -20,8 +20,7 @@ class CongeResource extends JsonResource
             'date_debut' => $this->date_debut,
             'date_fin' => $this->date_fin,
             'etat' => $this->etat,
-            'user_id' => $this->user_id, // Assuming there's a user_id field
-            // Add other fields as needed
+            'user_id' => $this->user_id,
         ];
     }
 }

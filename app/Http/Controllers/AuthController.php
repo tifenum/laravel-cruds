@@ -22,71 +22,7 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register', 'forget' , 'reset']]);
     }
 
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required',
-    //         'prenom' => 'nullable|string',
-    //         'cin' => 'required|integer|unique:users',
-    //         'cnss' => 'required|integer|unique:users',
-    //         'post' => 'nullable|string',
-    //         'email' => 'required|email|unique:users',
-    //         'date_de_naissance' => 'nullable|date',
-    //         'genre' => 'nullable|string',
-    //         'salaire' => 'nullable|numeric',
-    //         'date_embauche' => 'nullable|date',
-    //         'tel' => 'nullable|integer',
-    //         'ville' => 'nullable|string',
-    //         'adresse' => 'nullable|string',
-    //         'image' => 'nullable|string',
-    //         'password' => 'required',
-    //         'role' => 'nullable|string',
-    //     ]);
-    
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'response' => Response::HTTP_BAD_REQUEST,
-    //             'success' => false,
-    //             'message' => $validator->errors(),
-    //         ], Response::HTTP_BAD_REQUEST);
-    //     } else {
-    //         try {
-    //             $user = new User;
-    //             $user->name = $request->name;
-    //             $user->prenom = $request->prenom;
-    //             $user->cin = $request->cin;
-    //             $user->cnss = $request->cnss;
-    //             $user->post = $request->post;
-    //             $user->email = $request->email;
-    //             $user->date_de_naissance = $request->date_de_naissance;
-    //             $user->genre = $request->genre;
-    //             $user->salaire = $request->salaire;
-    //             $user->date_embauche = $request->date_embauche;
-    //             $user->tel = $request->tel;
-    //             $user->ville = $request->ville;
-    //             $user->adresse = $request->adresse;
-    //             $user->image = $request->image ?? 'profile.jpg';
-    //             $user->role = $request->role ?? 'EMPLOYER';
-    //             $user->password = Hash::make($request->password);
-    //             $user->remember_token = Str::random(60);
-    //             $user->save();
-    
-    //             return response()->json([
-    //                 'response' => Response::HTTP_CREATED,
-    //                 'success' => true,
-    //                 'message' => 'Register successfully.',
-    //                 'data' => $request->all()
-    //             ], Response::HTTP_CREATED);
-    
-    //         } catch (QueryException $e) {
-    //             return response()->json([
-    //                 'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-    //                 'success' => false,
-    //                 'message' => $e->getMessage(),
-    //             ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //         }
-    //     }
-    // }
+
     
     public function register(Request $request)
     {
@@ -119,12 +55,12 @@ class AuthController extends Controller
             try {
                 $user = new User;
     
-                // Handle photo upload
+
                 if ($request->hasFile('image')) {
                     $photoPath = $request->file('image')->store('photos', 'public');
                     $user->image = $photoPath;
                 } else {
-                    $user->image = 'profile.jpg'; // Default image if none is provided
+                    $user->image = 'profile.jpg';
                 }
     
                 $user->name = $request->name;

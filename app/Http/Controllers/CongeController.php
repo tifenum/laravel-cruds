@@ -20,7 +20,7 @@ class CongeController extends BaseController
             'date_debut' => 'required|date',
             'date_fin' => 'required|date',
             'etat' => 'required|in:not studied,refused,accepted',
-            'user_id' => 'required|exists:users,id', // Ensure user_id is validated
+            'user_id' => 'required|exists:users,id',
         ]);
 
         return Conge::create($request->all());

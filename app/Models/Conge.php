@@ -10,7 +10,7 @@ class Conge extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type_de_conge_id', 'date_debut', 'date_fin', 'etat','user_id' // Add this line
+        'type_de_conge_id', 'date_debut', 'date_fin', 'etat','user_id'
 
     ];
 
