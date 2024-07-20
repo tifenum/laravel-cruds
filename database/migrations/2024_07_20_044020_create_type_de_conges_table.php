@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-    {
-        Schema::create('type_de_conges', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
-    }
-    
-    public function down()
-    {
-        Schema::dropIfExists('type_de_conges');
-    }
-    
+public function up()
+{
+    Schema::create('type_de_conges', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->timestamps();
+    });
+}
+
+public function down()
+{
+    Schema::dropIfExists('type_de_conges');
+}
+
 };

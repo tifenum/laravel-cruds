@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('type_de_conge_id')->constrained()->onDelete('cascade');
             $table->date('date_debut');
             $table->date('date_fin');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('etat', ['not studied', 'refused', 'accepted'])->default('not studied');
             $table->timestamps();
         });
@@ -25,5 +26,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('conges');
     }
-    
 };

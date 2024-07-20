@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('role')->default('EMPLOYER');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
+            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

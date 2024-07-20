@@ -10,11 +10,16 @@ class Conge extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type_de_conge_id', 'date_debut', 'date_fin', 'etat',
+        'type_de_conge_id', 'date_debut', 'date_fin', 'etat','user_id' // Add this line
+
     ];
 
     public function typeDeConge()
     {
         return $this->belongsTo(TypeDeConge::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

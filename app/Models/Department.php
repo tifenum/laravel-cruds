@@ -15,4 +15,8 @@ class Department extends Model
     {
         return $this->belongsTo(DepartmentType::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -14,13 +14,28 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return[
+        return [
             'id' => $this->id,
-            'Name' => $this->name,
-            'Email' => $this->email,
-            'Photo' => $this->photo,
-            'Created_at' => $this->created_at,
-            'Updated_at' => $this->updated_at,
+            'name' => $this->name,
+            'prenom' => $this->prenom,
+            'cin' => $this->cin,
+            'cnss' => $this->cnss,
+            'post' => $this->post,
+            'date_de_naissance' => $this->date_de_naissance,
+            'genre' => $this->genre,
+            'salaire' => $this->salaire,
+            'date_embauche' => $this->date_embauche,
+            'tel' => $this->tel,
+            'ville' => $this->ville,
+            'adresse' => $this->adresse,
+            'image' => $this->image,
+            'email' => $this->email,
+            'role' => $this->role,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'department' => new DepartmentResource($this->whenLoaded('department')),
+            'contracts' => ContractResource::collection($this->whenLoaded('contracts')),
+            'conges' => CongeResource::collection($this->whenLoaded('conges')),
         ];
     }
 }
