@@ -11,6 +11,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\CongeController;
 use App\Http\Controllers\TypeDeCongeController;
+use App\Http\Controllers\CandidatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'delete']);
     Route::get('/user/search', [UserController::class, 'search']);
     Route::get('/user/paginate', [UserController::class, 'paginate']);
+    Route::put('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
 
     Route::get('/account', [AccountController::class, 'me']);
     Route::post('/account', [AccountController::class, 'update']);
@@ -87,4 +89,9 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::get('/type-de-conges/{id}', [TypeDeCongeController::class, 'show']);
     Route::put('/type-de-conges/{id}', [TypeDeCongeController::class, 'update']);
     Route::delete('/type-de-conges/{id}', [TypeDeCongeController::class, 'destroy']);
+    
+    Route::post('/candidatures', [CandidatureController::class, 'store']);
+    Route::get('/candidatures', [CandidatureController::class, 'index']);
+    Route::put('/candidatures/{id}/status/{status}', [CandidatureController::class, 'updateStatus']);
+    Route::delete('/candidatures/{id}', [CandidatureController::class, 'destroy']);
 });

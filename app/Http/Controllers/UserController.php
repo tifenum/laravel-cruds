@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserStatusNotification;
 
 class UserController extends Controller
 {
@@ -105,7 +106,35 @@ class UserController extends Controller
     }
     
 
+
     
+    public function toggleStatus($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $newStatus = ($user->status === 'activated') ? 'deactivated' : 'activated';
+            $user->status = $newStatus;
+            $user->save();
+    
+            // Send email notification
+            Mail::to($user->email)->send(new UserStatusNotification($user, $newStatus));
+    
+            return response()->json([
+                'response' => Response::HTTP_OK,
+                'success' => true,
+                'message' => 'User status toggled and email sent successfully',
+                'data' => $user
+            ], Response::HTTP_OK);
+        } catch (QueryException $e) {
+            return response()->json([
+                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -124,6 +153,7 @@ class UserController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => 'required|email|unique:users,email,' . $id,
             'role' => 'required',
+            'department_id' => 'required|integer|exists:departments,id',
         ]);
     
         if ($validator->fails()) {
@@ -148,7 +178,7 @@ class UserController extends Controller
                 $user->ville = $request->ville;
                 $user->adresse = $request->adresse;
                 $user->role = $request->role;
-    
+                $user->department_id = $request->department_id;
                 if ($request->hasFile('image')) {
                     $imagePath = $request->file('image')->getRealPath();
                     $result = Cloudinary::upload($imagePath, ['folder' => 'user']);
