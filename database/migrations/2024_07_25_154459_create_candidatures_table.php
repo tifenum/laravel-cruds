@@ -27,7 +27,7 @@ class CreateCandidaturesTable extends Migration
             $table->text('experience');
             $table->integer('year_ex');
             $table->string('school');
-            $table->string('cv'); // Store the file path
+            $table->string('cv');
             $table->text('lettre');
             $table->enum('status', ['not studied', 'accepted', 'refused'])->default('not studied');
             $table->timestamps();

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToUsersTable extends Migration
+class UpdateStatusEnumValues extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddStatusToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('status', ['activated', 'desactivated'])->default('activated');
+            $table->enum('status', ['activated', 'deactivated'])->default('activated')->change();
         });
     }
 
@@ -26,7 +26,8 @@ class AddStatusToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('status');
+            // If needed, define the previous ENUM values here
+            $table->enum('status', ['activated', 'desactivated'])->default('activated')->change();
         });
     }
 }

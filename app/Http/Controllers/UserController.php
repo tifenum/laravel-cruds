@@ -112,11 +112,10 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $newStatus = ($user->status === 'activated') ? 'deactivated' : 'activated';
+            $newStatus = ($user->status === 'activated') ? 'desactivated' : 'activated';
             $user->status = $newStatus;
             $user->save();
     
-            // Send email notification
             Mail::to($user->email)->send(new UserStatusNotification($user, $newStatus));
     
             return response()->json([

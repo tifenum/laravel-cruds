@@ -80,7 +80,30 @@ class CandidatureController extends BaseController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function downloadCV($id)
+    {
+        try {
+            $candidature = Candidature::findOrFail($id);
+            $cvPath = $candidature->cv;
     
+            if (!Storage::exists($cvPath)) {
+                return response()->json([
+                    'response' => Response::HTTP_NOT_FOUND,
+                    'success' => false,
+                    'message' => 'File not found',
+                ], Response::HTTP_NOT_FOUND);
+            }
+    
+            return Storage::download($cvPath);
+            
+        } catch (QueryException $e) {
+            return response()->json([
+                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public function index()
     {
