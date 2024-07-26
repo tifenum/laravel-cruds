@@ -16,7 +16,6 @@ class CandidatureController extends BaseController
     public function store(Request $request)
     {
         try {
-            // Validate the request data
             $validatedData = $request->validate([
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
@@ -35,10 +34,8 @@ class CandidatureController extends BaseController
                 'status' => 'required|string'
             ]);
         
-            // Store the uploaded CV file
             $cvPath = $request->file('cv')->store('cv_files');
         
-            // Create a new Candidature record
             $candidature = Candidature::create([
                 'nom' => $validatedData['nom'],
                 'prenom' => $validatedData['prenom'],
@@ -64,7 +61,6 @@ class CandidatureController extends BaseController
             ], Response::HTTP_CREATED);
     
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Return a response with validation errors
             return response()->json([
                 'success' => false,
                 'message' => 'Validation error',
@@ -72,14 +68,12 @@ class CandidatureController extends BaseController
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
     
         } catch (\Illuminate\Http\Exceptions\PostTooLargeException $e) {
-            // Handle file size errors
             return response()->json([
                 'success' => false,
                 'message' => 'File size too large'
             ], Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
     
         } catch (\Exception $e) {
-            // Handle other types of errors
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred: ' . $e->getMessage()
@@ -107,36 +101,7 @@ class CandidatureController extends BaseController
         }
     }
 
-    // public function updateStatus($id, $status)
-    // {
-    //     try {
-    //         $candidature = Candidature::findOrFail($id);
-    //         if (!in_array($status, ['accepted', 'refused'])) {
-    //             return response()->json([
-    //                 'response' => Response::HTTP_BAD_REQUEST,
-    //                 'success' => false,
-    //                 'message' => 'Invalid status',
-    //             ], Response::HTTP_BAD_REQUEST);
-    //         }
 
-    //         $candidature->status = $status;
-    //         $candidature->save();
-
-    //         return response()->json([
-    //             'response' => Response::HTTP_OK,
-    //             'success' => true,
-    //             'message' => 'Candidature status updated successfully',
-    //             'data' => $candidature
-    //         ], Response::HTTP_OK);
-
-    //     } catch (QueryException $e) {
-    //         return response()->json([
-    //             'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-    //             'success' => false,
-    //             'message' => $e->getMessage(),
-    //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
     public function updateStatus($id, $status)
     {
         try {
@@ -149,11 +114,9 @@ class CandidatureController extends BaseController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            // Update the status
             $candidature->status = $status;
             $candidature->save();
 
-            // Send notification email
             Mail::to($candidature->email)->send(new CandidatureStatusNotification($candidature, $status));
 
             return response()->json([
