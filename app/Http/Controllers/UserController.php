@@ -229,47 +229,51 @@ class UserController extends Controller
     }
 
 
-    
-    
     public function search(Request $request)
-    {
-        try {
-            $keyword = $request->input('keyword');
-    
-            $users = User::where(function($query) use ($keyword) {
-                $query->where('name', 'like', "%$keyword%")
-                    ->orWhere('prenom', 'like', "%$keyword%")
-                    ->orWhere('cin', 'like', "%$keyword%")
-                    ->orWhere('cnss', 'like', "%$keyword%")
-                    ->orWhere('post', 'like', "%$keyword%")
-                    ->orWhere('date_de_naissance', 'like', "%$keyword%")
-                    ->orWhere('genre', 'like', "%$keyword%")
-                    ->orWhere('salaire', 'like', "%$keyword%")
-                    ->orWhere('date_embauche', 'like', "%$keyword%")
-                    ->orWhere('tel', 'like', "%$keyword%")
-                    ->orWhere('ville', 'like', "%$keyword%")
-                    ->orWhere('adresse', 'like', "%$keyword%")
-                    ->orWhere('image', 'like', "%$keyword%")
-                    ->orWhere('email', 'like', "%$keyword%")
-                    ->orWhere('role', 'like', "%$keyword%");
-            })->get();
-    
-            return response()->json([
-                'response' => Response::HTTP_OK,
-                'success' => true,
-                'message' => 'Search results for keyword: ' . $keyword,
-                'data' => UserResource::collection($users)
-            ], Response::HTTP_OK);
-            
-        } catch (QueryException $e) {
-            return response()->json([
-                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+{
+    try {
+        $query = User::query();
+
+        if ($request->has('role')) {
+            $query->where('role', 'like', "%" . $request->input('role') . "%");
         }
+        if ($request->has('name')) {
+            $query->where('name', 'like', "%" . $request->input('name') . "%");
+        }
+        if ($request->has('prenom')) {
+            $query->where('prenom', 'like', "%" . $request->input('prenom') . "%");
+        }
+        if ($request->has('cin')) {
+            $query->where('cin', $request->input('cin'));
+        }
+        if ($request->has('cnss')) {
+            $query->where('cnss', $request->input('cnss'));
+        }
+        if ($request->has('email')) {
+            $query->where('email', 'like', "%" . $request->input('email') . "%");
+        }
+        if ($request->has('genre')) {
+            $query->where('genre', 'like', "%" . $request->input('genre') . "%");
+        }
+
+        $users = $query->get();
+
+        return response()->json([
+            'response' => Response::HTTP_OK,
+            'success' => true,
+            'message' => 'Search results',
+            'data' => UserResource::collection($users)
+        ], Response::HTTP_OK);
+
+    } catch (QueryException $e) {
+        return response()->json([
+            'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            'success' => false,
+            'message' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-    
+}
+
     public function paginate(Request $request)
     {
         try {
