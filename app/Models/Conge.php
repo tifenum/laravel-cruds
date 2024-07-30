@@ -11,7 +11,6 @@ class Conge extends Model
 
     protected $fillable = [
         'type_de_conge_id', 'date_debut', 'date_fin', 'etat','user_id'
-
     ];
 
     public function typeDeConge()

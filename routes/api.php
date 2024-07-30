@@ -73,6 +73,7 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::get('/contracts/{id}', [ContractController::class, 'show']);
     Route::put('/contracts/{id}', [ContractController::class, 'update']);
     Route::delete('/contracts/{id}', [ContractController::class, 'destroy']);
+    Route::get('/contracts/{id}/file', [ContractController::class, 'downloadContract']);
 
     // Conge Routes
     Route::get('/conges', [CongeController::class, 'index']);
@@ -82,6 +83,7 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::delete('/conges/{id}', [CongeController::class, 'destroy']);
     Route::patch('/conges/{id}/accepter', [CongeController::class, 'accepterConge']);
     Route::patch('/conges/{id}/refuser', [CongeController::class, 'refuserConge']);
+    Route::get('/conges/not-studied', [CongeController::class, 'notStudied']);
 
     // TypeDeConge Routes
     Route::get('/type-de-conges', [TypeDeCongeController::class, 'index']);

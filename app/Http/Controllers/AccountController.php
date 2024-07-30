@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 
-class UserController extends Controller
+class AccountController extends Controller
 {
 
     public function create(Request $request)
