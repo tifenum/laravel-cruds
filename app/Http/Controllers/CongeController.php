@@ -10,7 +10,7 @@ class CongeController extends BaseController
 {
     public function index()
     {
-        return Conge::with('typeDeConge')->get();
+        return Conge::with(['typeDeConge', 'user'])->get();
     }
 
     public function store(Request $request)
@@ -26,9 +26,11 @@ class CongeController extends BaseController
         return Conge::create($request->all());
     }
 
-    public function show(Conge $conge)
+    public function show($id)
     {
-        return $conge->load('typeDeConge');
+        $conge = Conge::with(['typeDeConge', 'user'])->findOrFail($id);
+
+        return response()->json($conge);
     }
 
     public function update(Request $request, $id)
