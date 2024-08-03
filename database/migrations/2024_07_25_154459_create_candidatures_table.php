@@ -25,10 +25,10 @@ class CreateCandidaturesTable extends Migration
             $table->string('level_study');
             $table->string('email')->unique();
             $table->text('experience');
-            $table->integer('year_ex');
+            $table->string('genre');
             $table->string('school');
             $table->string('cv');
-            $table->text('lettre');
+            $table->string('lettre');
             $table->enum('status', ['not studied', 'accepted', 'refused'])->default('not studied');
             $table->timestamps();
         });

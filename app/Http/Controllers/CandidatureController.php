@@ -13,6 +13,73 @@ use Illuminate\Support\Facades\Storage;
 
 class CandidatureController extends BaseController
 {
+    // public function store(Request $request)
+    // {
+    //     try {
+    //         $validatedData = $request->validate([
+    //             'nom' => 'required|string',
+    //             'prenom' => 'required|string',
+    //             'cin' => 'required|string',
+    //             'date_de_naissance' => 'required|date',
+    //             'adresse' => 'required|string',
+    //             'telephone' => 'required|string',
+    //             'diplome' => 'required|string',
+    //             'level_study' => 'required|string',
+    //             'email' => 'required|email',
+    //             'experience' => 'required|string',
+    //             'year_ex' => 'required|integer',
+    //             'school' => 'required|string',
+    //             'cv' => 'required|file|mimes:txt,pdf,doc,docx',
+    //             'lettre' => 'required|string',
+    //             'status' => 'required|string'
+    //         ]);
+        
+    //         $cvPath = $request->file('cv')->store('cv_files');
+        
+    //         $candidature = Candidature::create([
+    //             'nom' => $validatedData['nom'],
+    //             'prenom' => $validatedData['prenom'],
+    //             'cin' => $validatedData['cin'],
+    //             'date_de_naissance' => $validatedData['date_de_naissance'],
+    //             'adresse' => $validatedData['adresse'],
+    //             'telephone' => $validatedData['telephone'],
+    //             'diplome' => $validatedData['diplome'],
+    //             'level_study' => $validatedData['level_study'],
+    //             'email' => $validatedData['email'],
+    //             'experience' => $validatedData['experience'],
+    //             'year_ex' => $validatedData['year_ex'],
+    //             'school' => $validatedData['school'],
+    //             'cv' => $cvPath,
+    //             'lettre' => $validatedData['lettre'],
+    //             'status' => $validatedData['status']
+    //         ]);
+        
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Candidature created successfully',
+    //             'data' => $candidature
+    //         ], Response::HTTP_CREATED);
+    
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Validation error',
+    //             'errors' => $e->errors()
+    //         ], Response::HTTP_UNPROCESSABLE_ENTITY);
+    
+    //     } catch (\Illuminate\Http\Exceptions\PostTooLargeException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'File size too large'
+    //         ], Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
+    
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'An error occurred: ' . $e->getMessage()
+    //         ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    //     }
+    // }
     public function store(Request $request)
     {
         try {
@@ -27,14 +94,15 @@ class CandidatureController extends BaseController
                 'level_study' => 'required|string',
                 'email' => 'required|email',
                 'experience' => 'required|string',
-                'year_ex' => 'required|integer',
+                'genre' => 'required|string',
                 'school' => 'required|string',
                 'cv' => 'required|file|mimes:txt,pdf,doc,docx',
-                'lettre' => 'required|string',
+                'lettre' => 'required|file|mimes:txt,pdf,doc,docx',
                 'status' => 'required|string'
             ]);
         
             $cvPath = $request->file('cv')->store('cv_files');
+            $lettrePath = $request->file('lettre')->store('lettre_files');
         
             $candidature = Candidature::create([
                 'nom' => $validatedData['nom'],
@@ -47,10 +115,10 @@ class CandidatureController extends BaseController
                 'level_study' => $validatedData['level_study'],
                 'email' => $validatedData['email'],
                 'experience' => $validatedData['experience'],
-                'year_ex' => $validatedData['year_ex'],
+                'genre' => $validatedData['genre'],
                 'school' => $validatedData['school'],
                 'cv' => $cvPath,
-                'lettre' => $validatedData['lettre'],
+                'lettre' => $lettrePath,
                 'status' => $validatedData['status']
             ]);
         
@@ -123,7 +191,34 @@ class CandidatureController extends BaseController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
+    public function downloadLettre($id)
+    {
+        try {
+            // Find the candidature by ID
+            $candidature = Candidature::findOrFail($id);
+            $lettrePath = $candidature->lettre;
+    
+            // Check if the lettre file exists
+            if (!Storage::exists($lettrePath)) {
+                return response()->json([
+                    'response' => Response::HTTP_NOT_FOUND,
+                    'success' => false,
+                    'message' => 'File not found',
+                ], Response::HTTP_NOT_FOUND);
+            }
+    
+            // Return the file as a download response
+            return Storage::download($lettrePath);
+            
+        } catch (QueryException $e) {
+            return response()->json([
+                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 
     public function updateStatus($id, $status)
     {

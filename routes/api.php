@@ -33,6 +33,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::get('me', [AuthController::class, 'me']);
 });
 
+Route::post('/candidatures', [CandidatureController::class, 'store']);
+
 Route::middleware(['jwt.verify'])->group(function () {
     Route::get('/users', [UserController::class, 'read']);
     Route::post('/users', [UserController::class, 'create']);
@@ -92,10 +94,10 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::put('/type-de-conges/{id}', [TypeDeCongeController::class, 'update']);
     Route::delete('/type-de-conges/{id}', [TypeDeCongeController::class, 'destroy']);
     
-    Route::post('/candidatures', [CandidatureController::class, 'store']);
     Route::get('/candidatures', [CandidatureController::class, 'index']);
     Route::put('/candidatures/{id}/status/{status}', [CandidatureController::class, 'updateStatus']);
     Route::delete('/candidatures/{id}', [CandidatureController::class, 'destroy']);
     Route::get('candidatures/{id}/cv', [CandidatureController::class, 'downloadCV']);
+    Route::get('candidatures/{id}/download-lettre', [CandidatureController::class, 'downloadLettre']);
 
 });

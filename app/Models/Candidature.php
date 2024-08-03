@@ -11,7 +11,7 @@ class Candidature extends Model
 
     protected $fillable = [
         'nom', 'prenom', 'cin', 'date_de_naissance', 'adresse', 'telephone',
-        'diplome', 'level_study', 'email', 'experience', 'year_ex', 'school',
+        'diplome', 'level_study', 'email', 'experience', 'genre', 'school',
         'cv', 'lettre', 'status',
     ];
 }
