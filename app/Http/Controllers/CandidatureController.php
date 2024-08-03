@@ -204,4 +204,29 @@ class CandidatureController extends BaseController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function show($id)
+    {
+        try {
+            $candidature = Candidature::findOrFail($id);
+
+            return response()->json([
+                'response' => Response::HTTP_OK,
+                'success' => true,
+                'data' => $candidature
+            ], Response::HTTP_OK);
+
+        } catch (QueryException $e) {
+            return response()->json([
+                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (\Exception $e) {
+            return response()->json([
+                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

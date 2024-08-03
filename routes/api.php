@@ -99,5 +99,6 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::delete('/candidatures/{id}', [CandidatureController::class, 'destroy']);
     Route::get('candidatures/{id}/cv', [CandidatureController::class, 'downloadCV']);
     Route::get('candidatures/{id}/download-lettre', [CandidatureController::class, 'downloadLettre']);
+    Route::get('candidature/{id}', [CandidatureController::class, 'show']);
 
 });
