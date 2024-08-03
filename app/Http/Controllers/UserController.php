@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserStatusNotification;
+use App\Models\Department;
 
 class UserController extends Controller
 {
@@ -25,14 +26,11 @@ class UserController extends Controller
             'prenom' => 'nullable|string',
             'cin' => 'required|integer|unique:users',
             'cnss' => 'required|integer|unique:users',
-            'post' => 'nullable|string',
             'email' => 'required|email|unique:users',
             'date_de_naissance' => 'nullable|date',
             'genre' => 'nullable|string',
             'salaire' => 'nullable|numeric',
-            'date_embauche' => 'nullable|date',
             'tel' => 'nullable|integer',
-            'ville' => 'nullable|string',
             'adresse' => 'nullable|string',
             'password' => 'required',
             'role' => 'nullable|string',
@@ -57,13 +55,10 @@ class UserController extends Controller
                 $user->photo = $photoPath;
                 $user->cin = $request->cin;
                 $user->cnss = $request->cnss;
-                $user->post = $request->post;
                 $user->date_de_naissance = $request->date_de_naissance;
                 $user->genre = $request->genre;
                 $user->salaire = $request->salaire;
-                $user->date_embauche = $request->date_embauche;
                 $user->tel = $request->tel;
-                $user->ville = $request->ville;
                 $user->adresse = $request->adresse;
                 $user->role = $request->role;
                 $user->save();
@@ -134,81 +129,161 @@ class UserController extends Controller
     }
     
 
-    public function update($id, Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'prenom' => 'required',
-            'cin' => 'required',
-            'cnss' => 'required',
-            'post' => 'required',
-            'date_de_naissance' => 'required|date',
-            'genre' => 'required',
-            'salaire' => 'required|numeric',
-            'date_embauche' => 'required|date',
-            'tel' => 'required',
-            'ville' => 'required',
-            'adresse' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required',
-            'department_id' => 'required|integer|exists:departments,id',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json([
-                'response' => Response::HTTP_BAD_REQUEST,
-                'success' => false,
-                'message' => $validator->errors(),
-            ], Response::HTTP_BAD_REQUEST);
-        } else {
-            try {
-                $user = User::findOrFail($id);
-                $user->name = $request->name;
-                $user->prenom = $request->prenom;
-                $user->cin = $request->cin;
-                $user->cnss = $request->cnss;
-                $user->post = $request->post;
-                $user->date_de_naissance = $request->date_de_naissance;
-                $user->genre = $request->genre;
-                $user->salaire = $request->salaire;
-                $user->date_embauche = $request->date_embauche;
-                $user->tel = $request->tel;
-                $user->ville = $request->ville;
-                $user->adresse = $request->adresse;
-                $user->role = $request->role;
-                $user->department_id = $request->department_id;
-                if ($request->hasFile('image')) {
-                    $imagePath = $request->file('image')->getRealPath();
-                    $result = Cloudinary::upload($imagePath, ['folder' => 'user']);
-                    $imageUrl = $result->getSecurePath();
-                    $user->image = $imageUrl;
-                }
-    
-                $user->email = $request->email;
-    
+        // public function update($id, Request $request)
+        // {
+        //     $validator = Validator::make($request->all(), [
+        //         'name' => 'required',
+        //         'prenom' => 'required',
+        //         'cin' => 'required',
+        //         'cnss' => 'required',
+        //         'post' => 'required',
+        //         'date_de_naissance' => 'required|date',
+        //         'genre' => 'required',
+        //         'salaire' => 'required|numeric',
+        //         'date_embauche' => 'required|date',
+        //         'tel' => 'required',
+        //         'ville' => 'required',
+        //         'adresse' => 'required',
+        //         'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        //         'email' => 'required|email|unique:users,email,' . $id,
+        //         'role' => 'required',
+        //         'department_id' => 'required|integer|exists:departments,id',
+        //     ]);
+        
+        //     if ($validator->fails()) {
+        //         return response()->json([
+        //             'response' => Response::HTTP_BAD_REQUEST,
+        //             'success' => false,
+        //             'message' => $validator->errors(),
+        //         ], Response::HTTP_BAD_REQUEST);
+        //     } else {
+        //         try {
+        //             $user = User::findOrFail($id);
+        //             $user->name = $request->name;
+        //             $user->prenom = $request->prenom;
+        //             $user->cin = $request->cin;
+        //             $user->cnss = $request->cnss;
+        //             $user->post = $request->post;
+        //             $user->date_de_naissance = $request->date_de_naissance;
+        //             $user->genre = $request->genre;
+        //             $user->salaire = $request->salaire;
+        //             $user->date_embauche = $request->date_embauche;
+        //             $user->tel = $request->tel;
+        //             $user->ville = $request->ville;
+        //             $user->adresse = $request->adresse;
+        //             $user->role = $request->role;
+        //             $user->department_id = $request->department_id;
+        //             if ($request->hasFile('image')) {
+        //                 $imagePath = $request->file('image')->getRealPath();
+        //                 $result = Cloudinary::upload($imagePath, ['folder' => 'user']);
+        //                 $imageUrl = $result->getSecurePath();
+        //                 $user->image = $imageUrl;
+        //             }
+        
+        //             $user->email = $request->email;
+        
 
-                if ($request->has('password')) {
-                    $user->password = bcrypt($request->password);
-                }
-    
-                $user->save();
-    
+        //             if ($request->has('password')) {
+        //                 $user->password = bcrypt($request->password);
+        //             }
+        
+        //             $user->save();
+        
+        //             return response()->json([
+        //                 'response' => Response::HTTP_OK,
+        //                 'success' => true,
+        //                 'message' => 'User updated successfully',
+        //                 'data' => $user
+        //             ], Response::HTTP_OK);
+        //         } catch (QueryException $e) {
+        //             return response()->json([
+        //                 'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+        //                 'success' => false,
+        //                 'message' => $e->getMessage(),
+        //             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        //         }
+        //     }
+        // }
+        public function update($id, Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'prenom' => 'required',
+        'cin' => 'required',
+        'cnss' => 'required',
+        'date_de_naissance' => 'required|date',
+        'genre' => 'required',
+        'salaire' => 'required|numeric',
+        'tel' => 'required',
+        'adresse' => 'required',
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'role' => 'required',
+        'department_name' => 'required|string|exists:departments,name',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'response' => Response::HTTP_BAD_REQUEST,
+            'success' => false,
+            'message' => $validator->errors(),
+        ], Response::HTTP_BAD_REQUEST);
+    } else {
+        try {
+            $department = Department::where('name', $request->department_name)->first();
+
+            if (!$department) {
                 return response()->json([
-                    'response' => Response::HTTP_OK,
-                    'success' => true,
-                    'message' => 'User updated successfully',
-                    'data' => $user
-                ], Response::HTTP_OK);
-            } catch (QueryException $e) {
-                return response()->json([
-                    'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'response' => Response::HTTP_NOT_FOUND,
                     'success' => false,
-                    'message' => $e->getMessage(),
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                    'message' => 'Department not found',
+                ], Response::HTTP_NOT_FOUND);
             }
+
+            $user = User::findOrFail($id);
+            $user->name = $request->name;
+            $user->prenom = $request->prenom;
+            $user->cin = $request->cin;
+            $user->cnss = $request->cnss;
+            $user->date_de_naissance = $request->date_de_naissance;
+            $user->genre = $request->genre;
+            $user->salaire = $request->salaire;
+            $user->tel = $request->tel;
+            $user->adresse = $request->adresse;
+            $user->role = $request->role;
+            $user->department_id = $department->id;
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->getRealPath();
+                $result = Cloudinary::upload($imagePath, ['folder' => 'user']);
+                $imageUrl = $result->getSecurePath();
+                $user->image = $imageUrl;
+            }
+
+            $user->email = $request->email;
+
+            if ($request->has('password')) {
+                $user->password = bcrypt($request->password);
+            }
+
+            $user->save();
+
+            return response()->json([
+                'response' => Response::HTTP_OK,
+                'success' => true,
+                'message' => 'User updated successfully',
+                'data' => $user
+            ], Response::HTTP_OK);
+        } catch (QueryException $e) {
+            return response()->json([
+                'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+}
+
     public function delete($id)
     {
         try {

@@ -33,7 +33,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::get('me', [AuthController::class, 'me']);
 });
 
-Route::post('/candidatures', [CandidatureController::class, 'store']);
+    Route::post('/candidatures', [CandidatureController::class, 'store']);
 
 Route::middleware(['jwt.verify'])->group(function () {
     Route::get('/users', [UserController::class, 'read']);

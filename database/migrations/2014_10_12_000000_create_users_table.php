@@ -19,13 +19,10 @@ class CreateUsersTable extends Migration
             $table->string('prenom')->nullable();
             $table->integer('cin')->unique();
             $table->integer('cnss')->unique();
-            $table->string('post')->nullable();
             $table->date('date_de_naissance')->nullable();
             $table->string('genre')->nullable();
             $table->decimal('salaire', 15, 2)->nullable();
-            $table->date('date_embauche')->nullable();
             $table->integer('tel')->nullable();
-            $table->string('ville')->nullable();
             $table->string('adresse')->nullable();
             $table->string('image')->default('profile.jpg');
             $table->string('email')->unique();

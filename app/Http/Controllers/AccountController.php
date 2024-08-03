@@ -91,13 +91,10 @@ class AccountController extends Controller
             'prenom' => 'required',
             'cin' => 'required',
             'cnss' => 'required',
-            'post' => 'required',
             'date_de_naissance' => 'required|date',
             'genre' => 'required',
             'salaire' => 'required|numeric',
-            'date_embauche' => 'required|date',
             'tel' => 'required',
-            'ville' => 'required',
             'adresse' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => 'required|email|unique:users,email,' . $id,
@@ -117,13 +114,10 @@ class AccountController extends Controller
                 $user->prenom = $request->prenom;
                 $user->cin = $request->cin;
                 $user->cnss = $request->cnss;
-                $user->post = $request->post;
                 $user->date_de_naissance = $request->date_de_naissance;
                 $user->genre = $request->genre;
                 $user->salaire = $request->salaire;
-                $user->date_embauche = $request->date_embauche;
                 $user->tel = $request->tel;
-                $user->ville = $request->ville;
                 $user->adresse = $request->adresse;
                 $user->role = $request->role;
     
@@ -189,13 +183,11 @@ class AccountController extends Controller
                     ->orWhere('prenom', 'like', "%$keyword%")
                     ->orWhere('cin', 'like', "%$keyword%")
                     ->orWhere('cnss', 'like', "%$keyword%")
-                    ->orWhere('post', 'like', "%$keyword%")
                     ->orWhere('date_de_naissance', 'like', "%$keyword%")
                     ->orWhere('genre', 'like', "%$keyword%")
                     ->orWhere('salaire', 'like', "%$keyword%")
                     ->orWhere('date_embauche', 'like', "%$keyword%")
                     ->orWhere('tel', 'like', "%$keyword%")
-                    ->orWhere('ville', 'like', "%$keyword%")
                     ->orWhere('adresse', 'like', "%$keyword%")
                     ->orWhere('image', 'like', "%$keyword%")
                     ->orWhere('email', 'like', "%$keyword%")
