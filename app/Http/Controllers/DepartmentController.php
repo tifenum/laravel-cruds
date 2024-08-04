@@ -29,12 +29,19 @@ class DepartmentController extends BaseController
         ]);
         return Department::create($request->all());
     }
+    
 
-    public function show(Department $department)
+    public function show($id)
     {
-        return $department->load('departmentType');
+        $department = Department::with('departmentType')->find($id);
+    
+        if (!$department) {
+            return response()->json(['message' => 'Department not found'], 404);
+        }
+    
+        return response()->json($department);
     }
-
+    
     public function update(Request $request, $id)
     {
         $request->validate([

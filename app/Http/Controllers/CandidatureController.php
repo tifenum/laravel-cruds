@@ -218,7 +218,7 @@ class CandidatureController extends BaseController
         } catch (QueryException $e) {
             return response()->json([
                 'response' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'success' => false,
+                'success' => false, 
                 'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
