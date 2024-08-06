@@ -11,9 +11,9 @@ class Contract extends Model
 
     protected $fillable = ['user_id', 'contract_type_id', 'start_date', 'end_date', 'contract_file'];
 
-    public function contractType()
+    public function typeDeConge()
     {
-        return $this->belongsTo(ContractType::class);
+        return $this->belongsTo(TypeDeConge::class, 'type_de_conge_id');
     }
 
     public function user()

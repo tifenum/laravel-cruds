@@ -10,9 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContractController extends BaseController
 {
-    public function show(Contract $contract)
+    public function show($id)
     {
-        return $contract->load(['contractType', 'user']);
+        $contract = Contract::with(['typeDeConge', 'user'])->findOrFail($id);
+
+        return response()->json($contract);
     }
 
     public function index(Request $request)
@@ -93,8 +95,6 @@ class ContractController extends BaseController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
-    
 
     public function getContractFile($id)
     {
