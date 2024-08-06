@@ -12,7 +12,7 @@ class ContractController extends BaseController
 {
     public function show($id)
     {
-        $contract = Contract::with(['typeDeConge', 'user'])->findOrFail($id);
+        $contract = Contract::with(['contractType', 'user'])->findOrFail($id);
 
         return response()->json($contract);
     }
