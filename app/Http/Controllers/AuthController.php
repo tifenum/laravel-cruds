@@ -32,7 +32,7 @@ class AuthController extends Controller
             'cin' => 'required|integer|unique:users',
             'cnss' => 'required|integer|unique:users',
             'email' => 'required|email|unique:users',
-            'date_de_naissance' => 'nullable|date',
+            'date_de_naissance' => 'nullable|string',
             'genre' => 'nullable|string',
             'salaire' => 'nullable|numeric',
             'tel' => 'nullable|integer',
