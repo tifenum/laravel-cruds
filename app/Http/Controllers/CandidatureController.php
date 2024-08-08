@@ -165,7 +165,7 @@ class CandidatureController extends BaseController
             $candidature->status = $status;
             $candidature->save();
 
-            Mail::to($candidature->email)->send(new CandidatureStatusNotification($candidature, $status));
+            // Mail::to($candidature->email)->send(new CandidatureStatusNotification($candidature, $status));
 
             return response()->json([
                 'response' => Response::HTTP_OK,

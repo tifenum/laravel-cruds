@@ -111,12 +111,12 @@ class UserController extends Controller
             $user->status = $newStatus;
             $user->save();
     
-            Mail::to($user->email)->send(new UserStatusNotification($user, $newStatus));
+            // Mail::to($user->email)->send(new UserStatusNotification($user, $newStatus));
     
             return response()->json([
                 'response' => Response::HTTP_OK,
                 'success' => true,
-                'message' => 'User status toggled and email sent successfully',
+                'message' => 'User status toggled successfully',
                 'data' => $user
             ], Response::HTTP_OK);
         } catch (QueryException $e) {
